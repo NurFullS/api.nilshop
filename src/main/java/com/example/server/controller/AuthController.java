@@ -102,6 +102,20 @@ public class AuthController {
         }
     }
 
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        try {
+            if (!authRepository.existsById(id)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Пользователь не найден");
+            }
+            authRepository.deleteById(id);
+            return ResponseEntity.ok("Пользователь удален");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Ошибка при удалении пользователя");
+        }
+    }
+
     private String generateToken(String email) {
         return JWT.create()
                 .withSubject(email)

@@ -1,6 +1,7 @@
 package com.example.server.controller;
 
 import com.example.server.modal.Product;
+import com.example.server.repository.AuthRepository;
 import com.example.server.repository.ProductRepository;
 import com.example.server.service.CloudinaryService;
 import org.springframework.http.HttpStatus;
@@ -17,10 +18,12 @@ public class ProductController {
 
     private final ProductRepository productRepository;
     private final CloudinaryService cloudinaryService;
+    private final AuthRepository authRepository;
 
-    public ProductController(ProductRepository productRepository, CloudinaryService cloudinaryService) {
+    public ProductController(ProductRepository productRepository, CloudinaryService cloudinaryService, AuthRepository authRepository) {
         this.productRepository = productRepository;
         this.cloudinaryService = cloudinaryService;
+        this.authRepository = authRepository;
     }
 
     @GetMapping
@@ -108,5 +111,11 @@ public class ProductController {
         }
         productRepository.deleteById(id);
         return ResponseEntity.ok("Продукт удалён");
+    }
+
+    @PostMapping("/pay")
+    public ResponseEntity<String> processPayment() {
+        System.out.println("💳 Платеж успешно обработан: ");
+        return ResponseEntity.ok("Платеж успешно обработан");
     }
 }
